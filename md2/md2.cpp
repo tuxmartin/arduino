@@ -1,5 +1,7 @@
 /* MD2 */
 
+# include <string.h>
+
 typedef struct {
 	unsigned char state[48];
 	unsigned char checksum[16];
@@ -109,27 +111,13 @@ void make_digest(char *md5str, const unsigned char *digest, int len) /* {{{ */
 	md5str[len * 2] = '\0';
 }
 
-void do_md2(char *arg)
+void do_md2(char *arg, char *returnedHash)
 {
-	char md2str[33];
 	MD2_CTX context;
-	unsigned char digest[16];
-	
-	md2str[0] = '\0';
+	unsigned char digest[16];	
 	MD2Init(&context);
 	MD2Update(&context, (unsigned char*)arg, strlen(arg));
 	MD2Final(digest, &context);
-
-	make_digest(md2str, digest, 16);
-	Serial.println(md2str);
+	make_digest(returnedHash, digest, 16);
 }
 
-void setup() {
-	Serial.begin(9600);
-}
-
-void loop() {
-	do_md2("The quick brown fox jumps over the lazy dog");
-
-	delay(1000);  
-}
